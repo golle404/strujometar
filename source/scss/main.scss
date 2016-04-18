@@ -101,6 +101,16 @@ h2 {
     flex-grow: 1;
   }
 }
+.settings-view{
+  .settings-form{
+    padding: 0 1em;
+    display: flex;
+    flex-direction: column;  
+  }
+  /*padding: 1em;
+  max-width: 600px;
+  margin: auto;*/
+}
 /*.btn{
   font-size: 1.2em;
   color: $font-head;

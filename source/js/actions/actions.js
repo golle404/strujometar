@@ -15,6 +15,12 @@ module.exports = {
 			payload: payload
 		});
 	},
+	saveSettings: function(payload){
+		AppDispatcher.dispatch({
+			actionType: "SAVE_SETTINGS",
+			payload: payload
+		});
+	},
 	openEntry: function(payload){
 		AppDispatcher.dispatch({
 			actionType: "OPEN_ENTRY",

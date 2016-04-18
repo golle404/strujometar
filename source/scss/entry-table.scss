@@ -73,16 +73,18 @@ $zone-color: white;
 		}
 	}
 	.col{
-	  	//padding: .1em;
 	  	text-align: right;
 		&:last-child{
 			padding-right: 4px;
 		}		
     }
+    .col-item{
+		width: 16.667%;
+    }
     .col-desc{
-      width: 50%;
-      text-align: left;
-      text-indent: .2em;
+		width: 50%;
+		text-align: left;
+		text-indent: .2em;
     }
     .sub-head{
     	display: flex;

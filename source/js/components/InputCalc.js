@@ -28,7 +28,7 @@ module.exports=React.createClass({
 					<div className="col col-item">Iznos</div>
 				</div>
 				<CalcRow desc="Obračunska snaga"
-						 amount={this.props.entry.obs}
+						 amount={calc.obs}
 						 price={calc.obrSnaga}
 						 total={nf(mask, calc.totalObs)} />
 				<CalcRow desc="Trošak javnog snabdevača"

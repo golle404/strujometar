@@ -53,6 +53,8 @@
     text-align: right; }
     .entry-table .col:last-child {
       padding-right: 4px; }
+  .entry-table .col-item {
+    width: 16.667%; }
   .entry-table .col-desc {
     width: 50%;
     text-align: left;
@@ -204,6 +206,15 @@ h2 {
     flex-grow: 1; }
   .entry-input .calc-wrap {
     flex-grow: 1; }
+
+.settings-view {
+  /*padding: 1em;
+  max-width: 600px;
+  margin: auto;*/ }
+  .settings-view .settings-form {
+    padding: 0 1em;
+    display: flex;
+    flex-direction: column; }
 
 /*.btn{
   font-size: 1.2em;

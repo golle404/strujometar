@@ -2,70 +2,10 @@
 var clone = require("clone");
 var df = require("dateformat");
 
-
-var config = 
-	[{
-		id: 0,
-		datum: "02-22-2013",
-		obrSnaga: 42.839,
-		trosakJS: 121.29,
-		naknadaZPP: .093,
-		popust: .05,
-		akciza: 0,
-		porez: .2,
-		zone: [{
-			ime: "zelena",
-			donjiLimit: 0,
-			gornjiLimit: 350,
-			cenaNt: 1.353,
-			cenaVt: 5.412
-		}, {
-			ime: "plava",
-			donjiLimit: 350,
-			gornjiLimit: 1600,
-			cenaNt: 2.03,
-			cenaVt: 8.118
-		}, {
-			ime: "crvena",
-			donjiLimit: 1600,
-			gornjiLimit: -1,
-			cenaNt: 4.059,
-			cenaVt: 16.236
-		}]
-	},{
-		id: 1,
-		datum: "08-02-2015",
-		obrSnaga: 45.883,
-		trosakJS: 125.53,
-		naknadaZPP: .093,
-		popust: .05,
-		akciza: .075,
-		porez: .2,
-		zone: [{
-			ime: "zelena",
-			donjiLimit: 0,
-			gornjiLimit: 350,
-			cenaNt: 1.407,
-			cenaVt: 5.628
-		}, {
-			ime: "plava",
-			donjiLimit: 350,
-			gornjiLimit: 1600,
-			cenaNt: 2.11,
-			cenaVt: 8.44
-		}, {
-			ime: "crvena",
-			donjiLimit: 1600,
-			gornjiLimit: -1,
-			cenaNt: 4.22,
-			cenaVt: 16.88
-		}]
-	}]
-
 var meseci = ["Januar", "Februar", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Septembar", "Oktobar", "Novembar", "Decembar"]
 
 
-module.exports = function(curr, prev) {
+module.exports = function(curr, prev, sett, config) {
 	if (!prev) {
 		return {error: "Nema prethodnog unosa",
 				period: formatPeriod(curr.date)};
@@ -80,7 +20,11 @@ module.exports = function(curr, prev) {
 		return {error: "Nepotpuni ili neispravni podaci"};
 	};
 	//find right config
-	var cfg = clone(getConfig(curr.date));
+	var c = config.dt;
+	if(sett.brType === 1){
+		c = config.jt
+	}
+	var cfg = clone(getConfig(curr.date, c));
 	cfg.days = days;
 	cfg.date = curr.date;
 	cfg.ratioNt = Math.round(ratioNt * 100) / 100;
@@ -91,7 +35,8 @@ module.exports = function(curr, prev) {
 	cfg.totalVt = totalVt;
 	cfg.period = formatPeriod(curr.date)
 	cfg.periodShort = formatPeriod(curr.date, true)
-	cfg.totalObs = cfg.obrSnaga * curr.obs;
+	cfg.obs = sett.obrSnaga
+	cfg.totalObs = cfg.obrSnaga * cfg.obs;
 	cfg.totalTPP = cfg.naknadaZPP * totalKw;
 
 	//adjust limits and calc kwh per zone
@@ -113,7 +58,7 @@ module.exports = function(curr, prev) {
 	//prosečna cena po kw
 	cfg.pcpkw = cfg.totalPot / totalKw;
 	//zaduženje za el. energiju
-	cfg.zzElEn = cfg.totalPot + curr.obs*cfg.obrSnaga + cfg.trosakJS;
+	cfg.zzElEn = cfg.totalPot + cfg.totalObs + cfg.trosakJS;
 	//popust
 	cfg.discount = -(prev.ozp || 0) * cfg.popust;
 	//osnovica za akcizu
@@ -129,18 +74,18 @@ module.exports = function(curr, prev) {
 	return cfg;
 }
 
-function getConfig(date){
+function getConfig(date, c){
 	var id = 0;
 	var dd = Number.MIN_SAFE_INTEGER;
 
-	for(var i=0; i<config.length; i++){
-		var ddf = dateDiff(config[i].datum, date);
+	for(var i=0; i<c.length; i++){
+		var ddf = dateDiff(c[i].datum, date);
 		if(ddf < 0 && ddf > dd){
 			dd = ddf;
 			id = i;
 		}
 	} 
-	return config[id];
+	return c[id];
 }
 
 function dateDiff(start, end){

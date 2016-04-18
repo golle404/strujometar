@@ -154,7 +154,7 @@ module.exports = React.createClass({
 			.on("mouseover", function(d){
 				var left = xScale.rangeBand()*.5 + gBox.left + xScale(d.p)
 				var top = gBox.height - yScaleKWh(d.t) + this.props.y + 50;
-				tooltip(d3.format(",.2r")(d.h) + "kWh", left, top)
+				tooltip(d3.format(",.0f")(d.h) + "kWh", left, top)
 			})
 			.on("mouseout", function(){
 				tooltip(null)

@@ -3,7 +3,6 @@
 var React = require("react");
 
 var actions = require("../actions/actions.js");
-var calcMod = require("../modules/strujometar.js");
 var clone = require("clone");
 var nf = require("number-format.js");
 var mask = "#,###.00";
@@ -19,7 +18,7 @@ module.exports = React.createClass({
 		var data = this.store.getCurrent();
 		var entry = data.current;
 		var prev = data.prev;
-		var calc = calcMod(entry, prev)
+		var calc = data.calc;
 		var isDiscount = Boolean(entry.ozp) || false;
 		var ctrlMode = this.store.isNewEntry() ? "new" : "preview";
 		return {
@@ -49,7 +48,7 @@ module.exports = React.createClass({
 		var data = this.store.getCurrent();
 		var entry = data.current;
 		var prev = data.prev;
-		var calc = calcMod(entry, prev)
+		var calc = data.calc;
 		var isDiscount = Boolean(entry.ozp) || false;
 		var ctrlMode = this.store.isNewEntry() ? "new" : "preview";
 		this.setState({

@@ -13,6 +13,7 @@ import NewIcon from 'material-ui/lib/svg-icons/content/add-circle';
 import HomeIcon from 'material-ui/lib/svg-icons/action/home';
 import SettingsIcon from 'material-ui/lib/svg-icons/action/settings';
 
+var nanoajax = require('nanoajax')
 var calcMod = require('../modules/strujometar.js');
 
 var CHANGE_EVENT = 'change';
@@ -59,16 +60,28 @@ function getLocalSettings(){
 
 var AppStore = Object.assign({}, EventEmitter.prototype, {
   init: function(cb){
+    nanoajax.ajax({url:'data/config.json'}, function (code, rsp) {
+      if(code === 200){
+        AppStore.cfgLoaded(JSON.parse(rsp));
+        cb();
+      }else{
+        console.log("error")
+      }
+    })
+    
+    //cb();
+  },
+  cfgLoaded: function(cfg){
     _store = {
       view: EntryList,
-      defaultView: EntryList,
+      defaultView: SettingsView,
       viewKey: 0,
       data: getLocalData(),
       settings: getLocalSettings(),
+      config: cfg,
       currentEntry: -1,
       sidebarOpen: window.innerWidth > breakWidth
     };
-    cb();
   },
   addChangeListener: function(cb) {
     this.on(CHANGE_EVENT, cb);
@@ -88,6 +101,9 @@ var AppStore = Object.assign({}, EventEmitter.prototype, {
     }
     return a;
   },
+  getSettings: function(){
+    return _store.settings;
+  },
   sidebarOpen: function() {
     return _store.sidebarOpen;
   },
@@ -95,14 +111,14 @@ var AppStore = Object.assign({}, EventEmitter.prototype, {
     if(_store.settings.no){
       return _views['home'].viewClass;  
     }
-    return _views['list'].viewClass;
+    return _views['settings'].viewClass;
   },
   getKey: function() {
     return _store.viewKey;
   },
   getCalcData: function(){
     return _store.data.map(function(v,i,a){
-      return calcMod(v, a[i+1]);
+      return calcMod(v, a[i+1], _store.settings, _store.config);
     })
   },
   getLatestData: function(){
@@ -116,6 +132,7 @@ var AppStore = Object.assign({}, EventEmitter.prototype, {
       res.current = {vt: "", nt: "", obs:"", date: new Date(), ozp:""};  
     }
     res.prev = _store.data[_store.currentEntry + 1] || null;
+    res.calc = calcMod(res.current, res.prev, _store.settings, _store.config);
     return res;
   },
   getPrev: function(){
@@ -165,6 +182,11 @@ var AppStore = Object.assign({}, EventEmitter.prototype, {
     window.localStorage.setItem("data", JSON.stringify(_store.data));
     _store.view = _views.list.viewClass;
   },  
+  saveSettings: function(val){
+    _store.settings = val;
+    window.localStorage.setItem("settings", JSON.stringify(_store.settings));
+    _store.view = _views.list.viewClass;
+  },
   openEntry: function(val){
     _store.currentEntry = val;
     _store.view = EntryInput;
@@ -202,6 +224,10 @@ AppDispatcher.register((action) => {
     break;
     case "DELETE_ENTRY":
       AppStore.deleteEntry(action.payload)
+      AppStore.emit(CHANGE_EVENT);
+    break;
+    case "SAVE_SETTINGS":
+      AppStore.saveSettings(action.payload)
       AppStore.emit(CHANGE_EVENT);
     break;
     case "OPEN_ENTRY":
