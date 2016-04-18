@@ -1,0 +1,37 @@
+.navbar{
+  padding: 1em 2em;
+  display: flex;
+  align-items: center;
+  .btn{
+    border-color: $bg-sec-light;;
+    &:last-child{
+      border-right: thin solid $bg-sec-light;;
+    }
+    &:hover, &.active{
+      background-color: $bg-sec-light;;
+    }
+  }
+}
+.sub-nav{
+  width: 100%;
+  background-color: $bg-prim-light;
+  padding: .3em;
+  flex-grow: 0;
+  flex-shrink: 0;
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+  h2{
+    margin: 0;
+    padding: .5em 1em;
+  }
+  .btn{
+    border-color: $bg-prim;
+    &:last-child{
+      border-right: thin solid $bg-prim;
+    }
+    &:hover, &.active{
+      background-color: $bg-prim;
+    }
+  }
+}

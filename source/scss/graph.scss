@@ -1,0 +1,87 @@
+$graph-axis-color: #9e9e9e;
+$graph-axis-text: #9e9e9e;
+$graph-legend-text: #9e9e9e;
+$graph-bar-nt: blue;
+$graph-bar-vt: red;
+$graph-line: green;
+$tooltip-bg: black;
+$tooltip-text: white;
+
+.graph-container{
+	position: relative;
+	width: 80%;
+	min-width: 320px;
+	margin: 2em auto 0;
+	animation: zoom-in .2s ease-in;
+	svg{
+		width: 100%;
+		//outline: solid tomato;
+	}
+}
+.axis-x, .axis-y, .axis-line{
+	path, line{
+		fill: none;
+		stroke-width: 2;
+		stroke: $graph-axis-color;
+	}
+	text{
+		//font-size: .7em;
+		fill: $graph-axis-text;
+	}
+}
+
+.money-line{
+	fill: none;
+	stroke: $graph-line;
+	stroke-width: 3;
+}
+.line-point{
+	cursor: pointer;
+	fill: $graph-line;
+}
+
+.bar{
+	&.nt{
+		fill: $graph-bar-nt;
+	}
+	&.vt{
+		fill: $graph-bar-vt;
+	}
+}
+.legend{
+	text{
+		fill: $graph-legend-text;
+		//font-size: .8em;
+	}
+}
+.tooltip{
+	position: absolute;
+	transition: transform 150ms ease;
+	&.hidden{
+		transform: scaleX(0);
+		//display: none;
+	}
+	.tooltip-wrap{
+		position: absolute;
+		top: -45px;
+		left: 0;
+		padding: 2px 4px;
+		//font-size: 1em;
+		background-color: $tooltip-bg;
+		color: $tooltip-text;
+		border-radius: .5em;
+		transform: translateX(-50%);
+		z-index: 1;
+		&:after{
+			content: "";
+			position: absolute;
+			width: 10px;
+			height: 10px;
+			left: 50%;
+			bottom: 0;
+			background-color: $tooltip-bg;
+			transform: translateX(-50%) translateY(50%) rotate(45deg);
+			z-index: -1;
+		}
+	}
+}
