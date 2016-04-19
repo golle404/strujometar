@@ -24,7 +24,8 @@ module.exports = React.createClass({
 		return {
 			entry: entry,
 			prev: prev, 
-			calc: calc, 
+			calc: calc,
+			brType: data.brType, 
 			isDiscount: isDiscount,
 			ctrlMode: ctrlMode};
 	},
@@ -61,7 +62,7 @@ module.exports = React.createClass({
 	inputChange: function(e){
 		var entry = clone(this.state.entry);
 		entry[e.target.name] = e.target.value
-		var calc = calcMod(entry, this.state.prev)
+		var calc = this.store.getCalc(entry, this.state.prev)
 		this.setState({entry: entry, calc: calc})
 	},
 	inputDisChange: function(e){
@@ -73,7 +74,7 @@ module.exports = React.createClass({
 		var entry = clone(this.state.entry);
 		entry.date = d;
 		var prev = this.store.getPrev(new Date(d).valueOf());
-		var calc = calcMod(entry, prev)
+		var calc = this.store.getCalc(entry, prev)
 		this.setState({entry: entry, calc: calc, prev: prev})
 	},
 	toggleDiscount: function(){
@@ -89,7 +90,8 @@ module.exports = React.createClass({
 	render: function(){
 		var calcChild = <InputCalc
 					calc={this.state.calc} 
-					entry={this.state.entry}/>;
+					entry={this.state.entry}
+					brType={this.state.brType} />;
 		if(this.state.calc.error){
 			calcChild = <div className="input-calc">
 				{this.state.calc.error}</div>;
@@ -106,6 +108,7 @@ module.exports = React.createClass({
 					<h2>Stanje na brojilu</h2>
 					<InputForm 
 						mode={this.state.ctrlMode}
+						brType={this.state.brType}
 						entry={this.state.entry} 
 						onChange={this.inputChange} 
 						onDateChange={this.dateChange}

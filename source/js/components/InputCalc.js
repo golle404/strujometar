@@ -11,6 +11,21 @@ module.exports=React.createClass({
 	displayName: 'InputCalc',
 	render: function(){
 		var calc = this.props.calc;
+		var brType = this.props.brType;
+		var vtLabel = "Jedinstvena tarifa";
+		if(brType===2){
+			vtLabel = "Viša tarifa"
+		}
+		var ntRow = function(kw, cena, total){
+			if(brType === 2){
+				return <div className="row">
+							<div className="col col-item-desc">Niža tarifa</div>
+							<div className="col col-item lg-only">{nf(mask, kw)}</div>
+							<div className="col col-item lg-only">{cena}</div>
+							<div className="col col-item">{nf(mask, total)}</div>
+						</div>	
+			}
+		}
 		return(
 			<div className="entry-table">
 				<div className="lg-only">
@@ -42,17 +57,12 @@ module.exports=React.createClass({
 							</div>
 							<div className="col col-zone-item">
 								<div className="row">
-									<div className="col col-item-desc">Viša tarifa</div>
+									<div className="col col-item-desc">{vtLabel}</div>
 									<div className="col col-item lg-only">{nf(mask, v.vt)}</div>
 									<div className="col col-item lg-only">{v.cenaVt}</div>
 									<div className="col col-item">{nf(mask, v.totalVt)}</div>
 								</div>
-								<div className="row">
-									<div className="col col-item-desc">Niža tarifa</div>
-									<div className="col col-item lg-only">{nf(mask, v.nt)}</div>
-									<div className="col col-item lg-only">{v.cenaNt}</div>
-									<div className="col col-item">{nf(mask, v.totalNt)}</div>
-								</div>
+								{ntRow(v.nt, v.cenaNt, v.totalNt)}
 							</div>
 						</div>
 						)

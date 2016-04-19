@@ -16,7 +16,20 @@ module.exports=React.createClass({
 		return Math.round(disc*100)/100
 	},
 	render: function(){
-		var disabled = this.props.mode === "preview"
+		var disabled = this.props.mode === "preview";
+		var ntField;
+		var vtLabel = "Jedinstvena tarifa";
+		if(this.props.brType===2){
+			vtLabel = "Viša Tarifa";
+	    	ntField = <TextField
+						id="input-nt" 
+						name="nt"
+						disabled={disabled}
+						value = {this.props.entry.nt} 
+						onChange={this.props.onChange}
+						hintText="Novo stanje"
+					    floatingLabelText="Niža Tarifa" />
+	    }
 		return (
 				<div className='input-form'>
 					<DatePicker 
@@ -36,16 +49,9 @@ module.exports=React.createClass({
 						disabled={disabled}
 						value = {this.props.entry.vt} 
 						onChange={this.props.onChange}
-						hintText="Viša Tarifa"
-					    floatingLabelText="Viša Tarifa" />
-					<TextField
-						id="input-nt" 
-						name="nt"
-						disabled={disabled}
-						value = {this.props.entry.nt} 
-						onChange={this.props.onChange}
-						hintText="Niža Tarifa"
-					    floatingLabelText="Niža Tarifa" />
+						hintText="Novo stanje"
+					    floatingLabelText={vtLabel} />
+				    {ntField}
 					<Checkbox
 						style={{width: "auto"}}
 						labelStyle={{width: "auto"}}

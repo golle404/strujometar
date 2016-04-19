@@ -68,8 +68,6 @@ var AppStore = Object.assign({}, EventEmitter.prototype, {
         console.log("error")
       }
     })
-    
-    //cb();
   },
   cfgLoaded: function(cfg){
     _store = {
@@ -133,10 +131,14 @@ var AppStore = Object.assign({}, EventEmitter.prototype, {
     }
     res.prev = _store.data[_store.currentEntry + 1] || null;
     res.calc = calcMod(res.current, res.prev, _store.settings, _store.config);
+    res.brType = _store.settings.brType;
     return res;
   },
   getPrev: function(){
     return _store.data[_store.currentEntry + 1];
+  },
+  getCalc: function(curr, prev){
+    return calcMod(curr, prev, _store.settings, _store.config);
   },
   getDataByYear: function(y){
     var gpy = this.getPeriodYear;
