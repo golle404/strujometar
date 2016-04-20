@@ -61,7 +61,7 @@ module.exports = React.createClass({
 	},
 	inputChange: function(e){
 		var entry = clone(this.state.entry);
-		entry[e.target.name] = e.target.value
+		entry[e.target.name] = Number(e.target.value)
 		var calc = this.store.getCalc(entry, this.state.prev)
 		this.setState({entry: entry, calc: calc})
 	},
@@ -80,8 +80,8 @@ module.exports = React.createClass({
 	toggleDiscount: function(){
 		var isDiscount = !this.state.isDiscount;
 		var entry = clone(this.state.entry);
-		if(isDiscount){
-			entry.ozp = this.state.calc.zzElEn;
+		if(this.state.calc.zzElEn){
+			entry.ozp = this.state.calc.zzElEn.toFixed(2);
 		}else{
 			entry.ozp = 0;
 		}

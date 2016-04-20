@@ -14,10 +14,7 @@ import NavigationClose from 'material-ui/lib/svg-icons/navigation/close';
 var actions = require('../actions/actions.js');
 
 module.exports=React.createClass({
-	displayName: 'LeftSidebar',
-	getInitialState: function(){
-		return {viewList: AppStore.getViewsList()}
-	}, 
+	displayName: 'LeftSidebar', 
 	toggleSidebar: function(){
 		actions.toggleSidebar();
 	},
@@ -40,7 +37,20 @@ module.exports=React.createClass({
 								<NavigationClose />
 							</IconButton>
 						} />
-					{this.state.viewList.map(function(v, i){
+					{this.props.data.map(function(v, i){
+						return <MenuItem 
+									disabled={v.disabled}
+									key={i}
+									onTouchTap={openView.bind(null, v.action)}
+									primaryText={v.label}
+									leftIcon={<v.icon />} />				
+					})}	 
+		        </LeftNav> 
+		);
+	}
+})
+/*
+{this.state.viewList.map(function(v, i){
 						if(!v.divider){
 							return (
 								<MenuItem 
@@ -53,11 +63,7 @@ module.exports=React.createClass({
 							return <Divider key={i} />
 						}
 					})}	 
-		        </LeftNav> 
-		);
-	}
-})
-/*
+
 
 		          <MenuItem 
 		            onTouchTap={this.newEntry}

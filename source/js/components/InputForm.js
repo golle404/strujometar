@@ -69,7 +69,7 @@ module.exports=React.createClass({
 						floatingLabelText="Na iznos" 
 						name="ozp"
 						disabled={disabled} 
-						value = {this.formatDisc(this.props.entry.ozp) || ""}
+						value = {this.props.entry.ozp}
 						onChange={this.props.onDiscChange} /> 
 				</div>
 		);

@@ -31,8 +31,8 @@ module.exports=React.createClass({
 				<div className="lg-only">
 					<div className="sub-head">
 						<div>Ukupno dana: {calc.days} </div>
-						<div>Niža tarifa: {calc.totalNt}kWh ({nf(maskPct,calc.ratioNt * 100)})</div>
-						<div>Viša tarifa: {calc.totalVt}kWh ({nf(maskPct,calc.ratioVt * 100)})</div>
+						{brType === 2 ? <div>Niža tarifa: {calc.totalNt}kWh ({maskPct,calc.ratioNt}%)</div> : ""}
+						{brType === 2 ? <div>Viša tarifa: {calc.totalVt}kWh ({maskPct,calc.ratioVt}%)</div> : ""}
 						<div>Prosečna cena: {nf(mask,calc.pcpkw)}din/kWh </div>
 					</div>
 				</div>

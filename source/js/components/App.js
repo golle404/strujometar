@@ -20,6 +20,7 @@ module.exports = React.createClass({
     return {
       view: AppStore.getDefaultView(),
       mainKey: AppStore.getKey(),
+      sidebarData: AppStore.getSidebarData(),
       sidebarOpen: AppStore.sidebarOpen(),
       sidebarWidth: 220};
   },
@@ -40,6 +41,7 @@ module.exports = React.createClass({
     this.setState({
       view: AppStore.getView(), 
       mainKey: AppStore.getKey(),
+      sidebarData: AppStore.getSidebarData(),
       sidebarOpen: AppStore.sidebarOpen()
     });
   },
@@ -58,7 +60,8 @@ module.exports = React.createClass({
         style={this.getContainerStyle()}>
         <LeftSidebar 
           open={this.state.sidebarOpen}
-          width={this.state.sidebarWidth}/>
+          width={this.state.sidebarWidth}
+          data={this.state.sidebarData} />
         <Header open={!this.state.sidebarOpen}/>
         <Content view={this.state.view} key={this.state.mainKey} ref="content" />
         <Footer />

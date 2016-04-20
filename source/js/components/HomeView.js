@@ -6,7 +6,10 @@ module.exports=React.createClass({
 	displayName: 'HomeView',
 	render: function(){
 		return(
-			<div className="home">Home</div>
+			<div className="home">
+				<h2>O Strujometru</h2>
+				<div>lipsum</div>
+			</div>
 		);
 	}
 })

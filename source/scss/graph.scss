@@ -15,7 +15,6 @@ $tooltip-text: white;
 	animation: zoom-in .2s ease-in;
 	svg{
 		width: 100%;
-		//outline: solid tomato;
 	}
 }
 .axis-x, .axis-y, .axis-line{
@@ -25,7 +24,7 @@ $tooltip-text: white;
 		stroke: $graph-axis-color;
 	}
 	text{
-		//font-size: .7em;
+		font-size: .7em;
 		fill: $graph-axis-text;
 	}
 }

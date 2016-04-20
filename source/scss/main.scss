@@ -91,9 +91,13 @@ h2 {
   flex-direction: column;
   align-items: center; 
 }
+.entry-list{
+  animation: zoom-in .2s ease-in;
+}
 .entry-input{
   display: flex;
   flex-wrap: wrap;
+  animation: zoom-in .2s ease-in;
   .form-wrap{
     flex-grow: 1;
   }

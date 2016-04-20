@@ -91,6 +91,7 @@
   stroke: #9e9e9e; }
 
 .axis-x text, .axis-y text, .axis-line text {
+  font-size: .7em;
   fill: #9e9e9e; }
 
 .money-line {
@@ -199,9 +200,13 @@ h2 {
   flex-direction: column;
   align-items: center; }
 
+.entry-list {
+  animation: zoom-in .2s ease-in; }
+
 .entry-input {
   display: flex;
-  flex-wrap: wrap; }
+  flex-wrap: wrap;
+  animation: zoom-in .2s ease-in; }
   .entry-input .form-wrap {
     flex-grow: 1; }
   .entry-input .calc-wrap {

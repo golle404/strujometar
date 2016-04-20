@@ -25,20 +25,11 @@ var VIEWS = {
   home: HomeView,
   settings: SettingsView
 };
-var _views = {};
-_views.newEnt={name: "newEnt", viewClass: EntryInput, label: "Novi Unos", icon: NewIcon, sep: true};
-_views.div = {divider: true};
-_views.home={name: "home", viewClass: HomeView, label: "Početna", icon: HomeIcon};
-_views.list={name: "list", viewClass: EntryList, label: "Lista Obračuna", icon: ListIcon};
-_views.graph={name: "graph", viewClass: GraphView, label: "Grafikon Potrošnje", icon: GraphIcon};
-_views.settings={name: "settings", viewClass: SettingsView, label: "Podešavanja", icon: SettingsIcon};
-
 var breakWidth = 600;
 
-var _store = {};
+var _store, _sidebarData;
 
 function getLocalData(){
-  console.log("local");
   var res = [];
   if(window.localStorage.getItem("data")){
     res = JSON.parse(window.localStorage.getItem("data"));
@@ -50,7 +41,6 @@ function getLocalData(){
 
 function getLocalSettings(){
   var sett = {};
-  console.log("settings")
   if(window.localStorage.getItem("settings")){
     sett = JSON.parse(window.localStorage.getItem("settings"));
   }
@@ -71,8 +61,8 @@ var AppStore = Object.assign({}, EventEmitter.prototype, {
   },
   cfgLoaded: function(cfg){
     _store = {
-      view: EntryList,
-      defaultView: SettingsView,
+      view: HomeView,
+      defaultView: HomeView,
       viewKey: 0,
       data: getLocalData(),
       settings: getLocalSettings(),
@@ -80,6 +70,16 @@ var AppStore = Object.assign({}, EventEmitter.prototype, {
       currentEntry: -1,
       sidebarOpen: window.innerWidth > breakWidth
     };
+    _sidebarData = [];
+    var setuped = !Boolean(_store.settings.brType)
+    _sidebarData.push({action: "newEntry", label: "Novi Unos", icon: NewIcon, disabled: setuped});
+    _sidebarData.push({action: "home", label: "Početna", icon: HomeIcon});
+    _sidebarData.push({action: "list", label: "Lista Obračuna", icon: ListIcon, disabled: setuped});
+    _sidebarData.push({action: "graph", label: "Grafikon Potrošnje", icon: GraphIcon, disabled: setuped});
+    _sidebarData.push({action: "settings", label: "Podešavanja", icon: SettingsIcon});
+  },
+  getSidebarData: function(){
+    return _sidebarData;
   },
   addChangeListener: function(cb) {
     this.on(CHANGE_EVENT, cb);
@@ -90,15 +90,6 @@ var AppStore = Object.assign({}, EventEmitter.prototype, {
   getView: function() {
     return _store.view;
   },
-  getViewsList: function(){
-    var a = [];
-    for(var v in _views){
-      if (_views.hasOwnProperty(v)) {
-        a.push(_views[v]);
-      }
-    }
-    return a;
-  },
   getSettings: function(){
     return _store.settings;
   },
@@ -106,10 +97,7 @@ var AppStore = Object.assign({}, EventEmitter.prototype, {
     return _store.sidebarOpen;
   },
   getDefaultView: function() {
-    if(_store.settings.no){
-      return _views['home'].viewClass;  
-    }
-    return _views['settings'].viewClass;
+    return _store.defaultView;
   },
   getKey: function() {
     return _store.viewKey;
@@ -127,7 +115,7 @@ var AppStore = Object.assign({}, EventEmitter.prototype, {
     if(_store.data[_store.currentEntry]){
       res.current = _store.data[_store.currentEntry];
     }else{
-      res.current = {vt: "", nt: "", obs:"", date: new Date(), ozp:""};  
+      res.current = {vt: 0, nt: 0, date: new Date(), ozp:0};  
     }
     res.prev = _store.data[_store.currentEntry + 1] || null;
     res.calc = calcMod(res.current, res.prev, _store.settings, _store.config);
@@ -176,18 +164,19 @@ var AppStore = Object.assign({}, EventEmitter.prototype, {
     }
     this.sortEntries();
     window.localStorage.setItem("data", JSON.stringify(_store.data));
-    _store.view = _views.list.viewClass;
+    _store.view = _store.defaultView;
   },
   deleteEntry: function(val){
     _store.data.splice(_store.currentEntry, 1);
     this.sortEntries();
     window.localStorage.setItem("data", JSON.stringify(_store.data));
-    _store.view = _views.list.viewClass;
+    _store.view = _store.defaultView;
   },  
   saveSettings: function(val){
     _store.settings = val;
     window.localStorage.setItem("settings", JSON.stringify(_store.settings));
-    _store.view = _views.list.viewClass;
+    _sidebarData.forEach(function(d){d.disabled = false});
+    _store.view = _store.defaultView;
   },
   openEntry: function(val){
     _store.currentEntry = val;
@@ -203,11 +192,11 @@ var AppStore = Object.assign({}, EventEmitter.prototype, {
     AppStore.emit(CHANGE_EVENT);
   },
   openView:function(view){
-    if(view === "newEnt"){
+    if(view === "newEntry"){
       _store.currentEntry = -1;
       _store.viewKey++;
     }
-    _store.view = _views[view].viewClass;
+    _store.view = VIEWS[view];
     if(window.innerWidth < breakWidth){
       _store.sidebarOpen = false;  
     }
