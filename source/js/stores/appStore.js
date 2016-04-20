@@ -13,7 +13,8 @@ import NewIcon from 'material-ui/lib/svg-icons/content/add-circle';
 import HomeIcon from 'material-ui/lib/svg-icons/action/home';
 import SettingsIcon from 'material-ui/lib/svg-icons/action/settings';
 
-var nanoajax = require('nanoajax')
+var nanoajax = require('nanoajax');
+var objectAssign = require('object-assign');
 var calcMod = require('../modules/strujometar.js');
 
 var CHANGE_EVENT = 'change';
@@ -48,7 +49,7 @@ function getLocalSettings(){
 }
 
 
-var AppStore = Object.assign({}, EventEmitter.prototype, {
+var AppStore = objectAssign({}, EventEmitter.prototype, {
   init: function(cb){
     nanoajax.ajax({url:'data/config.json'}, function (code, rsp) {
       if(code === 200){

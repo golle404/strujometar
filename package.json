@@ -36,6 +36,7 @@
     "nanoajax": "^0.4.3",
     "number-format.js": "^1.1.9",
     "numeral": "^1.5.3",
+    "object-assign": "^4.0.1",
     "react": "^0.14.6",
     "react-datepicker": "^0.25.0",
     "react-dom": "^0.14.6",
